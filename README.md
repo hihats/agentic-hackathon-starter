@@ -35,6 +35,7 @@ python <filename>.py
 ```bash
 go mod init myapp
 go get -u github.com/gin-gonic/gin
+cd go
 go run main.go
 ```
 
