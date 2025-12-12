@@ -1,0 +1,118 @@
+<div class="container">
+  <h1>出社状況を削除</h1>
+
+  <div class="card">
+    <p class="message">以下の出社状況を削除します。よろしいですか？</p>
+
+    <dl class="details">
+      <div class="row">
+        <dt>名前</dt>
+        <dd><%= @attendance.name %></dd>
+      </div>
+      <div class="row">
+        <dt>位置</dt>
+        <dd><%= @attendance.location %></dd>
+      </div>
+    </dl>
+
+    <div class="actions">
+      <%= button_to '削除する', attendance_path(@attendance), method: :delete, class: 'button button-danger' %>
+      <%= link_to 'キャンセル', root_path, class: 'button button-secondary' %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  }
+
+  .message {
+    margin-top: 0;
+    color: #495057;
+  }
+
+  .details {
+    margin: 15px 0 0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid #f1f3f5;
+  }
+
+  .row:first-child {
+    border-top: none;
+  }
+
+  dt {
+    font-weight: bold;
+    color: #495057;
+  }
+
+  dd {
+    margin: 0;
+    color: #212529;
+    word-break: break-word;
+  }
+
+  .actions {
+    margin-top: 20px;
+  }
+
+  .button {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  .button:hover {
+    background-color: #0056b3;
+  }
+
+  .button-secondary {
+    background-color: #6c757d;
+  }
+
+  .button-secondary:hover {
+    background-color: #545b62;
+  }
+
+  .button-danger {
+    background-color: #dc3545;
+  }
+
+  .button-danger:hover {
+    background-color: #c82333;
+  }
+
+  body {
+    background-color: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+</style>
+

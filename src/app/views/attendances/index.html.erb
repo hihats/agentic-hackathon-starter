@@ -9,6 +9,11 @@
     <%= link_to '出社状況を登録', new_attendance_path, class: 'button' %>
   </div>
 
+  <div class="area-map">
+    <h2 class="section-title">エリアマップ</h2>
+    <%= image_tag 'area_map.png', alt: 'エリアマップ', class: 'map-image' %>
+  </div>
+
   <% if @attendances.any? %>
     <table>
       <thead>
@@ -27,7 +32,7 @@
             <td><%= attendance.created_at.strftime('%Y-%m-%d %H:%M') %></td>
             <td>
               <%= link_to '編集', edit_attendance_path(attendance), class: 'button-small' %>
-              <%= button_to '削除', attendance_path(attendance), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'button-small button-danger' %>
+              <%= link_to '削除', delete_attendance_path(attendance), class: 'button-small button-danger' %>
             </td>
           </tr>
         <% end %>
@@ -40,8 +45,7 @@
 
 <style>
   .container {
-    max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
     padding: 20px;
   }
 
@@ -61,6 +65,29 @@
 
   .actions {
     margin-bottom: 20px;
+  }
+
+  .area-map {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  }
+
+  .section-title {
+    margin: 0 0 12px;
+    font-size: 16px;
+    color: #495057;
+  }
+
+  .map-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 4px;
   }
 
   .button {

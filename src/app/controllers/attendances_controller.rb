@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_attendance, only: [:edit, :update, :destroy]
+  before_action :set_attendance, only: [:edit, :update, :delete, :destroy]
 
   def index
     @attendances = Attendance.all.order(created_at: :desc)
@@ -27,6 +27,9 @@ class AttendancesController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def delete
   end
 
   def destroy
