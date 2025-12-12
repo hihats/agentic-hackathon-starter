@@ -1,7 +1,17 @@
 <template>
   <div class="container">
-    <h1>Shuffle Lunch</h1>
-    <p class="subtitle">参加者をランダムにグループ分けします</p>
+    <header class="hero">
+      <div class="hero-icon">
+        <span class="icon-shuffle">&#x1F500;</span>
+        <span class="icon-food">&#x1F37D;</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="title-shuffle">Shuffle</span>
+        <span class="title-lunch">Lunch</span>
+      </h1>
+      <p class="hero-subtitle">参加者をランダムにグループ分けします</p>
+      <div class="hero-decoration"></div>
+    </header>
 
     <form @submit.prevent="handleShuffle">
       <ParticipantInput v-model="participants" />
@@ -76,6 +86,89 @@ const handleShuffle = async () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.icon-shuffle {
+  animation: shuffle-bounce 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+.icon-food {
+  animation: food-wiggle 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes shuffle-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(-5deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-4px) rotate(5deg); }
+}
+
+@keyframes food-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.title-shuffle {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  margin-right: 0.3em;
+}
+
+.title-lunch {
+  background: linear-gradient(135deg, #00dc82 0%, #00b368 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+
+.hero-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #00dc82, #667eea, transparent);
+  border-radius: 2px;
 }
 
 h1 {
