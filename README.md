@@ -43,6 +43,21 @@ http://localhost:8080 でサーバーが起動します。
 
 ## 開発環境
 
+```sh
+# Railsサービスを起動
+docker-compose up rails
+
+# バックグラウンドで起動
+docker-compose up -d rails
+
+# Rails コンソールにアクセス
+docker-compose exec rails bin/rails console
+
+# 依存関係の追加後
+docker-compose exec rails bundle install
+```
+
+
 VS Code Dev Containersを使用しています。
 
 ### 事前準備
