@@ -183,6 +183,17 @@
                 <div class="checkbox">
                   {selectedRestaurants.has(restaurant.name) ? '✓' : ''}
                 </div>
+                {#if restaurant.url}
+                  <a
+                    href={restaurant.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="external-link"
+                    on:click|stopPropagation
+                  >
+                    ↗
+                  </a>
+                {/if}
               </button>
             {/each}
           </div>
@@ -609,6 +620,28 @@
     color: #ffd93d;
     font-size: 12px;
     font-weight: bold;
+  }
+
+  .external-link {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: rgba(102, 126, 234, 0.9);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .external-link:hover {
+    background: rgba(102, 126, 234, 1);
+    transform: scale(1.1);
   }
 
   .loading {
