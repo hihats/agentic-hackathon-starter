@@ -1,13 +1,26 @@
-version: '3.8'
-
 services:
-  app:
-    image: mcr.microsoft.com/devcontainers/universal:2
-    volumes:
-      - ../..:/workspaces:cached
-    command: sleep infinity
+  go:
+    build:
+      context: ./go
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
     depends_on:
-      - db 
+      - db
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/mydb?sslmode=disable
+
+  nuxt:
+    build:
+      context: ./nuxt
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nuxt:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
 
   db:
     image: postgres:15-alpine
@@ -17,3 +30,8 @@ services:
       POSTGRES_DB: mydb
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
