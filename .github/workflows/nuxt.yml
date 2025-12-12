@@ -2,12 +2,12 @@ name: Nuxt CI
 
 on:
   push:
-    branches: [master, main]
+    branches: [feature/hackathon-i-team, main]
     paths:
       - 'nuxt/**'
       - '.github/workflows/nuxt.yml'
   pull_request:
-    branches: [master, main]
+    branches: [feature/hackathon-i-team, main]
     paths:
       - 'nuxt/**'
       - '.github/workflows/nuxt.yml'
