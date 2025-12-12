@@ -21,6 +21,9 @@ export interface ShuffleResponse {
 export interface Restaurant {
   name: string;
   genre: string;
+  imageUrl: string;
+  rating: number | null;
+  url: string;
 }
 
 export interface RestaurantResponse {

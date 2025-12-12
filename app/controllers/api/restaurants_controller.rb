@@ -3,7 +3,17 @@ class Api::RestaurantsController < ApplicationController
     service = TabelogScraperService.new
     restaurants = service.fetch_nearby_restaurants
 
-    render json: { restaurants: restaurants }
+    render json: {
+      restaurants: restaurants.map { |r|
+        {
+          name: r[:name],
+          genre: r[:genre],
+          imageUrl: r[:image_url],
+          rating: r[:rating],
+          url: r[:url]
+        }
+      }
+    }
   rescue StandardError => e
     Rails.logger.error("Restaurant API Error: #{e.message}")
     render json: { error: "店舗情報の取得に失敗しました" }, status: :service_unavailable
