@@ -4,41 +4,70 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a hackathon starter template with a universal devcontainer configuration supporting multiple languages and frameworks.
+**シャッフルランチアプリ (Shuffle Lunch)** - 社内メンバー間のコミュニケーション促進のためのWebアプリケーション。
 
-## Development Environment
+### 主要機能
+- 参加者リストをテキストエリアから入力（改行区切り）
+- 3〜4名のグループにランダム振り分け
+- グループごとにランチ場所をランダム割り当て
+- 結果をSlack用にコピー可能
 
-The project uses VS Code Dev Containers with the Microsoft Universal image (`mcr.microsoft.com/devcontainers/universal:2`).
+詳細仕様は `spec.md` を参照。
 
-### Supported Languages/Frameworks
+## Technology Stack
 
-- **TypeScript/JavaScript**: TypeScript, ts-node, yarn, pnpm available globally
-- **Ruby**: Ruby with Bundler
-- **Python**: pip (upgraded)
-- **Go**: Go toolchain
-- **Java**: JDK available
+- **Framework**: Ruby on Rails 8.0
+- **Ruby Version**: 3.x
+- **Frontend**: Rails標準（ERB + Hotwire/Turbo）
+- **Database**: SQLite（MVP）
+- **Port**: 3000
 
-### Pre-configured Ports
-
-- 3000: Rails/Node/Next.js
-- 5000: Python Flask
-- 8000: Python Django/FastAPI
-- 8080: Java/Go
-
-## Quick Start Commands
+## Development Commands
 
 ```bash
-# TypeScript - run directly without compilation
-ts-node <filename>.ts
+# ディレクトリ移動
+cd rails
 
-# Ruby
+# 依存関係インストール
 bundle install
-bundle exec ruby <filename>.rb
 
-# Python
-pip install -r requirements.txt
-python <filename>.py
+# サーバー起動
+bin/rails server -b 0.0.0.0
 
-# Node.js package managers
-yarn install  # or pnpm install
+# コンソール
+bin/rails console
+
+# テスト実行
+bin/rails test
+
+# ルーティング確認
+bin/rails routes
 ```
+
+## Architecture
+
+### グループ分けロジック（3〜4名ルール）
+
+| 総人数 | 分け方 |
+|--------|--------|
+| 3名 | 3 |
+| 4名 | 4 |
+| 5名 | 5（特例） |
+| 6名 | 3 + 3 |
+| 7名 | 4 + 3 |
+| 8名 | 4 + 4 |
+| 9名 | 3 + 3 + 3 |
+| 10名 | 4 + 3 + 3 |
+| 11名 | 4 + 4 + 3 |
+
+### 画面構成
+- 1ページ構成（SPA的なUX）
+- 左カラム: 参加者入力、店舗リスト編集、シャッフルボタン
+- 右カラム: グループ結果カード表示、コピーボタン
+
+## Code Style
+
+- Railsの規約に従う
+- ビューはERBを使用
+- JavaScriptはHotwire/Turboを優先、必要に応じてStimulus
+- 日本語コメント可
