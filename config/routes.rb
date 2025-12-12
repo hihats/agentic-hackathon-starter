@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   namespace :api do
     resources :shuffles, only: [:create]
     get 'restaurants/nearby', to: 'restaurants#nearby'
+    get 'restaurants/genres', to: 'restaurants#genres'
   end
 end

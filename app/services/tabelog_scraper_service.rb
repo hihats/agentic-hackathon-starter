@@ -7,14 +7,40 @@ class TabelogScraperService
   USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36".freeze
   MAX_RESTAURANTS = 20
 
-  def fetch_nearby_restaurants
+  def fetch_nearby_restaurants(genre_filter: nil)
     html = fetch_html
-    parse_restaurants(html)
+    restaurants = parse_restaurants(html)
+    
+    # Apply genre filter if specified
+    if genre_filter.present?
+      restaurants.select { |restaurant| restaurant[:genre]&.include?(genre_filter) }
+    else
+      restaurants
+    end
   rescue OpenURI::HTTPError => e
     Rails.logger.error("Tabelog HTTP Error: #{e.message}")
     []
   rescue StandardError => e
     Rails.logger.error("Tabelog Scraper Error: #{e.message}")
+    []
+  end
+
+  def fetch_available_genres
+    html = fetch_html
+    restaurants = parse_restaurants(html)
+    
+    # Extract unique genres and sort them
+    genres = restaurants.map { |r| r[:genre] }
+                      .reject(&:blank?)
+                      .uniq
+                      .sort
+    
+    genres
+  rescue OpenURI::HTTPError => e
+    Rails.logger.error("Tabelog HTTP Error: #{e.message}")
+    []
+  rescue StandardError => e
+    Rails.logger.error("Tabelog Genres Error: #{e.message}")
     []
   end
 
@@ -92,7 +118,11 @@ class TabelogScraperService
 
     genre_text = genre_element.text.strip
     # "エリア/ジャンル" 形式から ジャンル部分を抽出
-    genre_text.split("/").last&.strip || ""
+    genre_part = genre_text.split("/").last&.strip || ""
+    
+    # ジャンル部分から最初のカテゴリーのみを取得（複数ジャンルの場合）
+    # 「・」「,」「、」などの区切り文字で分割して最初の部分を使用
+    genre_part.split(/[・,、]/).first&.strip || ""
   end
 
   def extract_image_url(parent)

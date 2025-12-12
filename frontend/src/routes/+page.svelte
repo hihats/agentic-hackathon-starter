@@ -1,34 +1,67 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { shuffleService, restaurantService, type ShuffleGroup, type Restaurant } from '$lib/api';
+  import GenreFilter from '$lib/GenreFilter.svelte';
 
   let participants = '佐藤\n鈴木\n高橋\n田中\n伊藤\n渡辺\n山本\n中村\n小林\n加藤\n吉田';
   let fetchedRestaurants: Restaurant[] = [];
+  let filteredRestaurants: Restaurant[] = [];
   let selectedRestaurants: Set<string> = new Set();
   let groups: ShuffleGroup[] = [];
   let isLoading = false;
   let error = '';
   let isLoadingRestaurants = false;
   let restaurantError = '';
+  
+  // Genre filter state
+  let availableGenres: string[] = [];
+  let selectedGenre = '';
+  let isLoadingGenres = false;
 
   // 初期表示時に自動で食べログから取得
   onMount(async () => {
+    await loadGenres();
     await loadRestaurants();
   });
+
+  async function loadGenres() {
+    isLoadingGenres = true;
+    try {
+      availableGenres = await restaurantService.fetchGenres();
+    } catch (err) {
+      console.error('Failed to load genres:', err);
+    } finally {
+      isLoadingGenres = false;
+    }
+  }
 
   async function loadRestaurants() {
     isLoadingRestaurants = true;
     restaurantError = '';
     try {
-      fetchedRestaurants = await restaurantService.fetchNearby();
+      fetchedRestaurants = await restaurantService.fetchNearby(selectedGenre || undefined);
+      applyGenreFilter();
       // 取得後は全店舗を選択状態にする
-      selectedRestaurants = new Set(fetchedRestaurants.map(r => r.name));
+      selectedRestaurants = new Set(filteredRestaurants.map(r => r.name));
     } catch (err) {
       restaurantError = '店舗情報の取得に失敗しました';
       console.error(err);
     } finally {
       isLoadingRestaurants = false;
     }
+  }
+
+  function applyGenreFilter() {
+    if (!selectedGenre) {
+      filteredRestaurants = fetchedRestaurants;
+    } else {
+      filteredRestaurants = fetchedRestaurants.filter(r => r.genre.includes(selectedGenre));
+    }
+  }
+
+  async function handleGenreChange(event: CustomEvent<{ genre: string }>) {
+    selectedGenre = event.detail.genre;
+    await loadRestaurants();
   }
 
   function toggleRestaurant(name: string) {
@@ -41,7 +74,7 @@
   }
 
   function selectAll() {
-    selectedRestaurants = new Set(fetchedRestaurants.map(r => r.name));
+    selectedRestaurants = new Set(filteredRestaurants.map(r => r.name));
   }
 
   function deselectAll() {
@@ -112,15 +145,22 @@
           </div>
         </div>
 
+        <GenreFilter 
+          genres={availableGenres}
+          selectedGenre={selectedGenre}
+          isLoading={isLoadingGenres || isLoadingRestaurants}
+          on:change={handleGenreChange}
+        />
+
         {#if restaurantError}
           <div class="error restaurant-error">{restaurantError}</div>
         {/if}
 
         {#if isLoadingRestaurants}
           <div class="loading">店舗情報を取得中...</div>
-        {:else if fetchedRestaurants.length > 0}
+        {:else if filteredRestaurants.length > 0}
           <div class="restaurant-scroll-container">
-            {#each fetchedRestaurants as restaurant}
+            {#each filteredRestaurants as restaurant}
               <button
                 class="restaurant-card"
                 class:selected={selectedRestaurants.has(restaurant.name)}
