@@ -1,0 +1,141 @@
+<div class="container">
+  <h1>オフィス出社状況</h1>
+
+  <% if notice %>
+    <div class="notice"><%= notice %></div>
+  <% end %>
+
+  <div class="actions">
+    <%= link_to '出社状況を登録', new_attendance_path, class: 'button' %>
+  </div>
+
+  <% if @attendances.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>位置</th>
+          <th>登録日時</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @attendances.each do |attendance| %>
+          <tr>
+            <td><%= attendance.name %></td>
+            <td><%= attendance.location %></td>
+            <td><%= attendance.created_at.strftime('%Y-%m-%d %H:%M') %></td>
+            <td>
+              <%= link_to '編集', edit_attendance_path(attendance), class: 'button-small' %>
+              <%= button_to '削除', attendance_path(attendance), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'button-small button-danger' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="empty-message">現在、出社している人はいません。</p>
+  <% end %>
+</div>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .notice {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+
+  .actions {
+    margin-bottom: 20px;
+  }
+
+  .button {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    background-color: #0056b3;
+  }
+
+  .button-small {
+    display: inline-block;
+    background-color: #6c757d;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 5px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .button-small:hover {
+    background-color: #545b62;
+  }
+
+  .button-danger {
+    background-color: #dc3545;
+  }
+
+  .button-danger:hover {
+    background-color: #c82333;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #495057;
+  }
+
+  tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  .empty-message {
+    text-align: center;
+    color: #6c757d;
+    padding: 40px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  body {
+    background-color: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+</style>

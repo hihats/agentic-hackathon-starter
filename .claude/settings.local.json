@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(gh auth status:*)",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(docker-compose:*)",
+      "Bash(curl:*)"
     ]
   }
 }
