@@ -110,9 +110,17 @@
   }
 
   function copyToClipboard() {
-    const slackText = groups.map(group =>
-      `[${group.groupName}] ${group.members.join(', ')} @ ${group.restaurant}`
-    ).join('\n');
+    const slackText = groups.map(group => {
+      // Find the restaurant URL by matching the name
+      const restaurant = filteredRestaurants.find(r => r.name === group.restaurant);
+      const restaurantUrl = restaurant?.url || '';
+      
+      if (restaurantUrl) {
+        return `[${group.groupName}] ${group.members.join(', ')} @ ${group.restaurant}\n${restaurantUrl}`;
+      } else {
+        return `[${group.groupName}] ${group.members.join(', ')} @ ${group.restaurant}`;
+      }
+    }).join('\n\n');
 
     navigator.clipboard.writeText(slackText);
   }
