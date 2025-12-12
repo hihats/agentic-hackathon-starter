@@ -1866,10 +1866,12 @@ async function getIslandContext(event) {
   return ctx;
 }
 
+const _lazy_KkzHI_ = () => Promise.resolve().then(function () { return shuffle_post$1; });
 const _lazy_0XwxzV = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
   { route: '', handler: _oStzCE, lazy: false, middleware: true, method: undefined },
+  { route: '/api/shuffle', handler: _lazy_KkzHI_, lazy: true, middleware: false, method: "post" },
   { route: '/__nuxt_error', handler: _lazy_0XwxzV, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_0XwxzV, lazy: true, middleware: false, method: undefined }
@@ -2201,6 +2203,41 @@ const styles = {};
 const styles$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: styles
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const shuffle_post = defineEventHandler(async (event) => {
+  const body = await readBody(event);
+  const API_BASE = process.env.GO_API_URL || "http://go:8080";
+  try {
+    const response = await fetch(`${API_BASE}/api/shuffle`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw createError({
+        statusCode: response.status,
+        statusMessage: error.message || "Shuffle failed"
+      });
+    }
+    return await response.json();
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: error.message || "Failed to connect to API"
+    });
+  }
+});
+
+const shuffle_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: shuffle_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function renderPayloadResponse(ssrContext) {
